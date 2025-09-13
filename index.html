@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale-scale=1.0" />
+    <title>RemoView: Remote Viewing Training</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.19.0",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1"
+  }
+}
+</script>
+<style>
+    /* --- Psychic Energy / Nebula Theme --- */
+    @keyframes nebula-flow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .nebula-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        background-image:
+            radial-gradient(ellipse at 20% 80%, rgba(168, 85, 247, 0.2) 0%, transparent 70%),
+            radial-gradient(ellipse at 80% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 70%),
+            radial-gradient(ellipse at 50% 50%, rgba(107, 33, 168, 0.2) 0%, transparent 70%);
+        background-size: 200% 200%;
+        animation: nebula-flow 25s ease-in-out infinite;
+        z-index: 0;
+    }
+
+    @keyframes text-glow-purple {
+        0%, 100% { text-shadow: 0 0 10px #a855f7, 0 0 20px #a855f7, 0 0 30px #d8b4fe; }
+        50% { text-shadow: 0 0 20px #a855f7, 0 0 30px #d8b4fe, 0 0 40px #d8b4fe; }
+    }
+    .text-glow-purple {
+        animation: text-glow-purple 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow-purple {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 10px 0px rgba(168, 85, 247, 0.4), 0 0 20px 0px rgba(168, 85, 247, 0.3);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px 10px rgba(168, 85, 247, 0.6), 0 0 40px 15px rgba(107, 33, 168, 0.5);
+        }
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 10px 0px rgba(168, 85, 247, 0.4), 0 0 20px 0px rgba(168, 85, 247, 0.3);
+        }
+    }
+    .btn-glow-purple {
+        animation: pulse-glow-purple 3s infinite ease-in-out;
+    }
+
+    /* --- Styles for Immersive Game Screen --- */
+    @keyframes slide-in-bottom {
+        0% { transform: translateY(30px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+    .animate-slide-in-bottom {
+        animation: slide-in-bottom 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+
+    .input-glow {
+        background-color: rgba(14, 7, 26, 0.5);
+        border: 2px solid #5b21b6; /* darker purple */
+        box-shadow: 0 0 5px rgba(168, 85, 247, 0.4), inset 0 0 5px rgba(168, 85, 247, 0.3);
+        transition: all 0.3s ease-in-out;
+    }
+    .input-glow:focus {
+        outline: none;
+        border-color: #d8b4fe; /* lighter purple */
+        box-shadow: 0 0 15px rgba(168, 85, 247, 0.7), inset 0 0 10px rgba(168, 85, 247, 0.5);
+    }
+    
+    /* Custom select arrow for glowing effect */
+    select.input-glow {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23a855f7' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    /* --- Immersive Loading Screen Styles --- */
+    .loading-fog-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(ellipse at 50% 50%, rgba(59, 19, 104, 0.3) 0%, transparent 70%);
+        opacity: 0.5;
+        animation: nebula-flow 20s ease-in-out infinite;
+    }
+
+    @keyframes pulse-orb {
+        0%, 100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 20px 5px #a855f7, 0 0 40px 10px #7e22ce, inset 0 0 10px #d8b4fe;
+            opacity: 0.9;
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px 10px #a855f7, 0 0 60px 20px #7e22ce, inset 0 0 15px #d8b4fe;
+            opacity: 1;
+        }
+    }
+    .pulsing-orb {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        background: radial-gradient(circle, #d8b4fe 0%, #a855f7 70%);
+        border-radius: 50%;
+        animation: pulse-orb 3s infinite ease-in-out;
+    }
+
+    @keyframes sonar-sweep {
+        0% {
+            transform: scale(0.1);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(1.5);
+            opacity: 0;
+        }
+    }
+    .sonar-ring {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 3px solid rgba(168, 85, 247, 0.7);
+        border-radius: 50%;
+        animation: sonar-sweep 3s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+        opacity: 0;
+    }
+
+    @keyframes fade-in-slow {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    .animate-fade-in-slow {
+        animation: fade-in-slow 1s ease-out;
+    }
+
+</style>
+</head>
+  <body class="bg-black text-white">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

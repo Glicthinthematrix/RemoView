@@ -1,0 +1,5 @@
+{
+  "name": "Remoview",
+  "description": "An application that generates random global coordinates and uses AI to validate a user's remote viewing impressions against real-world geographical data, providing feedback and a score to help them practice.",
+  "requestFramePermissions": []
+}
